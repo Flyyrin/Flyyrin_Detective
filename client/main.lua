@@ -139,7 +139,7 @@ function startCheck(ped)
             if not cancel then
                 if not inspecting then
                     inspecting = true
-                    helpMessage('inspectting....')
+                    helpMessage('inspectting.')
                     local hash = GetPedCauseOfDeath(ped)
                     print(hash) --REMOVE
                     local item = getModelFromHash(hash)
