@@ -5,7 +5,7 @@ Config = {
     Config.KeybindKeys = {
         ['Q'] = 44,
         ['G'] = 47,
-        ['num6'] = 109,
+        ['X'] = 77,
         ['num7'] = 117,
         ['num8'] = 111,
         ['num9'] = 118
@@ -13,8 +13,14 @@ Config = {
     
 Config.Languages = {
     ['en'] = {
-        ['server_start'] = 'I started on here, WOW!',
-        ['fall'] = 'I fell',
+        ['not_dead'] = 'Player is not dead.',
+
+        --Causes
+        ['unknown'] = 'Unknown cause.',
+        ['fall'] = 'Player fell.',
+        ['car'] = 'Playr got hit by a car.',
+        ['drown'] = 'Player drowned.',
+        ['not_police'] = 'You are not a cop.',
     },
 
     ['fr'] = {
