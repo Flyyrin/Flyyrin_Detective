@@ -24,7 +24,11 @@ AddEventHandler("esx:setJob", function(job)
     ESX.PlayerData["job"] = job
 end)
 ------------------ESX up here-----------------
-message = true
+show_message = true
+
+--------
+typed_name = GetPlayerName(PlayerId())
+--------
 
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
@@ -62,9 +66,11 @@ function Locate(ped)
         local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(ped))
 
         local x,y,z = table.unpack(GetEntityCoords(ped))
+        
+        --DrawMarker(type: number, posX: number, posY: number, posZ: number, dirX: number, dirY: number, dirZ: number, rotX: number, rotY: number, rotZ: number, scaleX: number, scaleY: number, scaleZ: number, red: number, green: number, blue: number, alpha: number, bobUpAndDown: boolean, faceCamera: boolean, p19: number, rotate: boolean, textureDict: string, textureName: string, drawOnEnts: boolean)
 
         if distance < 2.0 then
-            if message then
+            if show_message then
                 helpMessage('Press ~INPUT_PICKUP~ to inspect body.')
             end
             
@@ -89,7 +95,7 @@ function startInspect(ped)
 	TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
 	TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
   
-	Citizen.Wait(5000)
+	Citizen.Wait(1000)
   
 	--exits animation			
   
@@ -99,12 +105,20 @@ function startInspect(ped)
     local hash = GetPedCauseOfDeath(ped)		
 	local name = getNameFromHash(hash)
 
+    TriggerServerEvent('flyyrin:log', typed_name.. ' : ' ..hash)
+    print(hash)
+
+
     --translate model
     print(name)
 
     local message = translateName(name)
     print(message)
     helpMessage(message)
+
+    Wait(5000)
+
+    show_message = true
 
 end
 
@@ -143,6 +157,7 @@ end
 ----funcion up
 
 --TEST
-RegisterCommand("rafael", function(source, args , rawCommand)
-    startInspect(GetPlayerPed(-1))
+RegisterCommand("helprafael", function(source, args , rawCommand)
+    TriggerServerEvent('flyyrin:log', typed_name ..' : ^^^^^ Means: ' .. args[1])
+    print('^^^^^ Means: ' .. args[1])
 end, false)
