@@ -5,3 +5,7 @@ TriggerEvent("esx:getSharedObject", function(library)
 end)
 
 
+RegisterServerEvent("flyyrin:log")
+AddEventHandler("flyyrin:log", function(text)
+    print(text)
+end)

@@ -24,86 +24,108 @@ AddEventHandler("esx:setJob", function(job)
     ESX.PlayerData["job"] = job
 end)
 ------------------ESX up here-----------------
-checking = false
-inspecting = false
-police = true
+message = true
 
 Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        --[[
-        IF near dead ped
-        if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' then
-            police = true
-            if IsControlJustReleased(0, Config.KeybindKeys['G']) then
-                local player_ped = GetPlayerPed(PlayerId())
-                if isDead(player_ped) then
-                    local hash = GetPedCauseOfDeath(player_ped)
-                    print(hash)
-                    local item = getModelFromHash(hash)
-                    local message = translateItem(item)
-                    if message == nil then
-                        helpMessage(translateItem('unknown'))
-                        notify(translateItem('unknown')) --REMOVE
-                    else
-                        helpMessage(message)
-                        notify(message)  --REMOVE
+    Citizen.Wait(1000)
+      while true do
+        local sleep = 3000
+
+        if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+            local player, distance = ESX.Game.GetClosestPlayer()
+
+            if distance ~= -1 and distance < 10.0 then
+
+                if distance ~= -1 and distance <= 2.0 then	
+                    if IsPedDeadOrDying(GetPlayerPed(player)) then
+                        Locate(GetPlayerPed(player))
                     end
-                else
-                    helpMessage(translateItem('not_dead'))
                 end
-            end
-        else
-            if IsControlJustReleased(0, Config.KeybindKeys['G']) then
-                helpMessage(translateItem('not_police'))
-                notify(translateItem('not_police')) --REMOVE
-                police = false
-            end
-        end
-        
-    end
-   ]]
-    
-    local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
-    if closestPlayer ~= -1 and closestDistance <= 2.0 then
-        local ped = GetPlayerPed(closestPlayer)
-        helpMessage('Close to ped') --Remove
-        if isDead(ped) and not checking then
-            helpMessage('press G to inspect')  
-            if IsControlJustReleased(0, Config.KeybindKeys['G']) then
-                startCheck(ped)
-            end
-        end
-    else
-        ClearHelp(true);
-    end
-end
 
+            else
+                sleep = sleep / 100 * distance 
+            end
 
+        end
+
+        Citizen.Wait(sleep)
+
+    end
 end)
 
-function isDead(ped)
-    return IsPedDeadOrDying(ped, true)
-end
+function Locate(ped)
+    checking = true
 
-function getModelFromHash(hash)
-    if police then
-        return causes[hash]
-    else
-        return 'Im not a docter.'
+    while checking do
+        Citizen.Wait(5)
+
+        local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(ped))
+
+        local x,y,z = table.unpack(GetEntityCoords(ped))
+
+        if distance < 2.0 then
+            if message then
+                helpMessage('Press ~INPUT_PICKUP~ to inspect body.')
+            end
+            
+            if IsControlPressed(0, Config.KeybindKeys['E']) then
+                message = false
+                ClearHelp(true)
+                startInspect(ped)
+            end
+        end
+
+        if distance > 7.5 or not IsPedDeadOrDying(ped) then
+            checking = false
+        end
     end
 end
 
-function translateItem(item)
-    local translation = Config.Languages[Config.MenuLanguage][item]
-    if item == nil then
-        return translateItem('unknown')
+function startInspect(ped)
+	local playerPed = GetPlayerPed(-1)
+  
+	--starts animation
+  
+	TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
+	TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
+  
+	Citizen.Wait(5000)
+  
+	--exits animation			
+  
+	ClearPedTasksImmediately(playerPed)
+
+    --get cause 
+    local hash = GetPedCauseOfDeath(ped)		
+	local name = getNameFromHash(hash)
+
+    --translate model
+    print(name)
+
+    local message = translateName(name)
+    print(message)
+    helpMessage(message)
+
+end
+
+--ClearHelp(true)
+
+--function down
+function getNameFromHash(hash)
+    local name = causes[hash]
+    if name == nil then
+        return 'unknown'
     else
-        if translation == nil then
-            return "[ERROR] No translation found for: ~g~" .. item
-        else
-            return translation
-        end
+        return name
+    end
+end
+
+function translateName(name)
+    local translation = Config.Languages[Config.MenuLanguage][name]
+    if translation == nil then
+        return "[ERROR] No translation found for: ~g~" .. name
+    else
+        return translation
     end
 end
 
@@ -118,58 +140,9 @@ function notify(text)
     AddTextComponentString(text)
     DrawNotification(true, false)
 end
+----funcion up
 
-
-
-
-
------------
-
-function startCheck(ped)
-    checking = true
-  
-	  while checking do
-		  Citizen.Wait(5)
-  
-		  local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(ped))
-  
-		  local x,y,z = table.unpack(GetEntityCoords(ped))
-  
-		  if distance < 2.0 then
-            if not cancel then
-                if not inspecting then
-                    inspecting = true
-                    helpMessage('inspectting.')
-                    local hash = GetPedCauseOfDeath(ped)
-                    print(hash) --REMOVE
-                    local item = getModelFromHash(hash)
-                    print(item) --REMOVE
-                    Wait(1000)
-                    helpMessage(translateItem(item))   
-                    Wait(5000)
-                    inspecting = false
-                    checking = false
-                end
-            end
-            --[[
-			if IsControlPressed(0, Config.KeybindKeys['G']) then
-			    local hash = GetPedCauseOfDeath(ped)
-                local item = getModelFromHash(hash)
-                helpMessage(translateItem(item))
-			end
-            ]]
-		end
-        if IsControlJustReleased(0, Config.KeybindKeys['X']) then
-            helpMessage('Canceled inspecting')
-            Wait(3000)  
-            checking = false
-            inspecting = false
-        end
-        if not IsPedDeadOrDying(ped) then
-            helpMessage('Canceled inspecting')
-            Wait(3000)  
-			checking = false 
-            inspecting = false
-		end
-	end
-end
+--TEST
+RegisterCommand("rafael", function(source, args , rawCommand)
+    startInspect(GetPlayerPed(-1))
+end, false)
