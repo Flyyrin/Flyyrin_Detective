@@ -7,6 +7,7 @@ causes = {
     
     --vehicles
     [-1553120962] = 'car',
+    [-1323279794] = 'aircraft_rotor',
 
     --Weapons
     [453432689] = 'pistol',
@@ -23,7 +24,6 @@ causes = {
     [-544306709] = 'jerry_can',
     [615608432] = 'molotov',
     [205991906] = 'advanced_sniper',
-    [-1323279794] = 'aircraft_rotor',
     [-952879014] = 'marksman_rifle',
     [-1312131151] = 'rpg',
     [539292904] = 'explosion',
@@ -36,8 +36,15 @@ causes = {
     [1317494643] = 'hamer',
     [1737195953] = 'night_stick',
     [-1716189206] = 'knife',
-    [0] = '#',
-    [0] = '#',
-    [0] = '#',
+    [-1569615261] = 'fist',
+    [-538741184] = 'switchblade',
+    [-1951375401] = 'flashlight',
+    --[1] = '#',
+    --[1] = '#',
+    --[1] = '#',
+    --[1] = '#',
 
+    --Animals
+    [-100946242] = 'rotweiler_shepard',
+    [-440934790] = 'retriver_husky',
 }
