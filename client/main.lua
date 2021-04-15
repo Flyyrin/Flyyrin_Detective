@@ -38,17 +38,17 @@ Citizen.CreateThread(function()
         if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
             local player, distance = ESX.Game.GetClosestPlayer()
 
-            if distance ~= -1 and distance < 10.0 then
+            --if distance ~= -1 and distance < 10.0 then
 
-                if distance ~= -1 and distance <= 2.0 then	
+                if distance ~= -1 and distance <= 5.0 then	
                     if IsPedDeadOrDying(GetPlayerPed(player)) then
                         Locate(GetPlayerPed(player))
                     end
                 end
 
-            else
+            --else
                 sleep = sleep / 100 * distance 
-            end
+            --end
 
         end
 
@@ -95,7 +95,7 @@ function startInspect(ped)
 	TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
 	TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
   
-	Citizen.Wait(1000)
+	Citizen.Wait(100)
   
 	--exits animation			
   
@@ -115,6 +115,7 @@ function startInspect(ped)
     local message = translateName(name)
     print(message)
     helpMessage(message)
+    print(message)
 
     Wait(5000)
 
@@ -160,4 +161,10 @@ end
 RegisterCommand("helprafael", function(source, args , rawCommand)
     TriggerServerEvent('flyyrin:log', typed_name ..' : ^^^^^ Means: ' .. args[1])
     print('^^^^^ Means: ' .. args[1])
+end, false)
+
+
+RegisterCommand("lonetest", function(source, args , rawCommand)
+    local ped = GetPlayerPed(-1)
+    startInspect(ped)
 end, false)
