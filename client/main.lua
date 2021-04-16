@@ -1,0 +1,190 @@
+ESX = nil
+
+Citizen.CreateThread(function()
+    while ESX == nil do
+        TriggerEvent("esx:getSharedObject", function(library) 
+            ESX = library 
+        end)
+
+		Citizen.Wait(0)
+    end
+
+    if ESX.IsPlayerLoaded() then
+        ESX.PlayerData = ESX.GetPlayerData()
+    end
+end)
+
+RegisterNetEvent("esx:playerLoaded")
+AddEventHandler("esx:playerLoaded", function(playerData)
+    ESX.PlayerData = playerData   
+end)
+
+RegisterNetEvent("esx:setJob")
+AddEventHandler("esx:setJob", function(job)
+    ESX.PlayerData["job"] = job
+end)
+------------------ESX up here-----------------
+show_message = true
+
+--------
+typed_name = GetPlayerName(PlayerId())
+--------
+
+Citizen.CreateThread(function()
+    Citizen.Wait(1000)
+      while true do
+        local sleep = 3000
+
+        if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+            local player, distance = ESX.Game.GetClosestPlayer()
+
+            --if distance ~= -1 and distance < 10.0 then
+                if distance ~= -1 and distance <= 5.0 then	
+                    if IsPedDeadOrDying(GetPlayerPed(player)) then
+                        Locate(GetPlayerPed(player))
+                    end
+                end
+
+            --else
+                sleep = sleep / 100 * distance 
+            --end
+
+        end
+
+        Citizen.Wait(sleep)
+
+    end
+end)
+
+function Locate(ped)
+    checking = true
+
+    while checking do
+        Citizen.Wait(5)
+
+        local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(ped))
+
+        local x,y,z = table.unpack(GetEntityCoords(ped))
+        
+        --DrawMarker(type: number, posX: number, posY: number, posZ: number, dirX: number, dirY: number, dirZ: number, rotX: number, rotY: number, rotZ: number, scaleX: number, scaleY: number, scaleZ: number, red: number, green: number, blue: number, alpha: number, bobUpAndDown: boolean, faceCamera: boolean, p19: number, rotate: boolean, textureDict: string, textureName: string, drawOnEnts: boolean)
+
+        if distance < 2.0 then
+            if show_message then
+                helpMessage('Press ~INPUT_SELECT_CHARACTER_MICHAEL~ to the open body interaction menu.')
+            end
+            
+            --[[
+            if IsControlPressed(0, Config.KeybindKeys['E']) then
+                show_message = false
+                ClearHelp(true)
+                startInspect(ped)
+            end
+            ]]
+        end
+
+        if distance > 7.5 or not IsPedDeadOrDying(ped) then
+            checking = false
+        end
+    end
+end
+
+function startInspect(ped)
+	local playerPed = GetPlayerPed(-1)
+  
+	--starts animation
+  
+	TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
+	TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
+  
+	Citizen.Wait(100)
+  
+	--exits animation			
+  
+	ClearPedTasksImmediately(playerPed)
+
+    --get cause 
+    local hash = GetPedCauseOfDeath(ped)		
+	local name = getNameFromHash(hash)
+
+    TriggerServerEvent('flyyrin:log', typed_name.. ' : ' ..hash)
+    print(hash)
+
+
+    --translate model
+    print(name)
+
+    local message = translateName(name)
+    print(message)
+    helpMessage(message)
+    print(message)
+
+    Wait(5000)
+
+    show_message = true
+
+end
+
+--ClearHelp(true)
+
+--function down
+function getNameFromHash(hash)
+    local name = causes[hash]
+    if name == nil then
+        return 'unknown'
+    else
+        return name
+    end
+end
+
+function translateName(name)
+    local translation = Config.Languages[Config.MenuLanguage][name]
+    if translation == nil then
+        return "[ERROR] No translation found for: ~g~" .. name
+    else
+        return translation
+    end
+end
+
+function helpMessage(text)
+    SetTextComponentFormat("STRING")
+    AddTextComponentString(text)
+    DisplayHelpTextFromStringLabel(0,0,0,-1)
+end
+
+function notify(text)
+    SetNotificationTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawNotification(true, false)
+end
+----funcion up
+
+--TEST
+RegisterCommand("helprafael", function(source, args , rawCommand)
+    TriggerServerEvent('flyyrin:log', typed_name ..' : ^^^^^ Means: ' .. args[1])
+    print('^^^^^ Means: ' .. args[1])
+end, false)
+
+
+RegisterCommand("lonetest", function(source, args , rawCommand)
+    local ped = GetPlayerPed(-1)
+    startInspect(ped)
+<<<<<<< HEAD
+end, false)
+
+RegisterCommand("lonetest_bone", function(source, args , rawCommand)
+    local ped = GetPlayerPed(-1)
+    startLocateBone(ped)
+end, false)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        _menuPool:ProcessMenus()
+        if IsControlJustPressed(1, Config.KeybindKeys['F5']) then
+            mainMenu:Visible(not mainMenu:Visible())
+        end
+    end
+end)
+=======
+end, false)
+>>>>>>> parent of 88fbc8c (subtitles + locate bone)
