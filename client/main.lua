@@ -79,6 +79,12 @@ function Locate(ped)
                 ClearHelp(true)
                 startInspect(ped)
             end
+            if IsControlPressed(0, Config.KeybindKeys['Q']) then
+                message = false
+                ClearHelp(true)
+                startLocateBone(ped)
+            end
+
         end
 
         if distance > 7.5 or not IsPedDeadOrDying(ped) then
@@ -142,7 +148,7 @@ function startLocateBone(ped)
                 Wait(0)
         
                 local pedCoords = GetEntityCoords(PlayerPedId())
-                DrawMarker(22, x, y, z+0.5, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.2, 0.2, 0.2, 255, 128, 0, 50, false, true, 2, nil, nil, true)
+                DrawMarker(22, x, y, z+0.3, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.2, 0.2, 0.2, 255, 128, 0, 100, true, true, 2, nil, nil, true)
             end
         end)
 
