@@ -39,7 +39,6 @@ Citizen.CreateThread(function()
             local player, distance = ESX.Game.GetClosestPlayer()
 
             --if distance ~= -1 and distance < 10.0 then
-
                 if distance ~= -1 and distance <= 5.0 then	
                     if IsPedDeadOrDying(GetPlayerPed(player)) then
                         Locate(GetPlayerPed(player))
@@ -71,14 +70,16 @@ function Locate(ped)
 
         if distance < 2.0 then
             if show_message then
-                helpMessage('Press ~INPUT_PICKUP~ to inspect body.')
+                helpMessage('Press ~INPUT_SELECT_CHARACTER_MICHAEL~ to the open body interaction menu.')
             end
             
+            --[[
             if IsControlPressed(0, Config.KeybindKeys['E']) then
-                message = false
+                show_message = false
                 ClearHelp(true)
                 startInspect(ped)
             end
+            ]]
         end
 
         if distance > 7.5 or not IsPedDeadOrDying(ped) then
@@ -213,4 +214,12 @@ RegisterCommand("lonetest_bone", function(source, args , rawCommand)
     startLocateBone(ped)
 end, false)
 
------------------Native UI test
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        _menuPool:ProcessMenus()
+        if IsControlJustPressed(1, Config.KeybindKeys['F5']) then
+            mainMenu:Visible(not mainMenu:Visible())
+        end
+    end
+end)

@@ -2447,9 +2447,9 @@ function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName)
             InstructionalButtons = true,
             MultilineFormats = true,
             ScaleWithSafezone = true,
-            ResetCursorOnOpen = false,
-            MouseControlsEnabled = false,
-            MouseEdgeEnabled = false,
+            ResetCursorOnOpen = true,
+            MouseControlsEnabled = true,
+            MouseEdgeEnabled = true,
             ControlDisablingEnabled = true,
             Audio = {
                 Library = "HUD_FRONTEND_DEFAULT_SOUNDSET",
@@ -2467,52 +2467,33 @@ function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName)
                     {0, 24}, -- Attack
                 },
                 Keyboard = {
-                    {0, 0}, -- Camera
-                    {0, 1}, -- Look Left and Right
-                    {0, 2}, -- Look Up and Down
-                    {0, 8}, -- Fly Up and Down
-                    {0, 9}, -- Fly Left and Right
-                    {0, 21}, -- Sprint
-                    {0, 22}, -- Jump
-                    {0, 23}, -- Enter
-                    {0, 24}, -- Attack
-                    {0, 25}, -- Aim
-                    {0, 26}, -- C
-                    {0, 30}, -- Move Left and Right
-                    {0, 31}, -- Move Up and Down
-                    {0, 47}, -- G
-                    {0, 59}, -- Move Vehicle Left and Right
-                    {0, 71}, -- Accelerate Vehicle
-                    {0, 72}, -- Vehicle Brake
-                    {0, 73}, -- X
-                    {0, 75}, -- Exit Vehicle
-                    {0, 76}, -- Vehicle Handbrake
-                    {0, 89}, -- Fly Yaw Left
-                    {0, 90}, -- Fly Yaw Right
-                    {0, 108}, -- Num Pad 4
-                    {0, 109}, -- Num Pad 6
-                    {0, 110}, -- Num Pad 5
-                    {0, 111}, -- Num Pad 8
-                    {0, 117}, -- Num Pad 7
-                    {0, 118}, -- Num Pad 9
-                    {0, 171}, -- CAPSLOCK
+                    {0, 201}, -- Select
+                    {0, 195}, -- X axis
+                    {0, 196}, -- Y axis
                     {0, 187}, -- Down
                     {0, 188}, -- Up
                     {0, 189}, -- Left
                     {0, 190}, -- Right
-                    {0, 195}, -- X axis
-                    {0, 196}, -- Y axis
-                    {0, 201}, -- Select
                     {0, 202}, -- Back
-                    {0, 203},  -- Spacebar?
                     {0, 217}, -- Select
+                    {0, 242}, -- Scroll down
+                    {0, 241}, -- Scroll up
                     {0, 239}, -- Cursor X
                     {0, 240}, -- Cursor Y
-                    {0, 241}, -- Scroll up
-                    {0, 242}, -- Scroll down
-                    {0, 249}, -- N
-                    {0, 305}, -- B
-                    {0, 306}, -- N
+                    {0, 31}, -- Move Up and Down
+                    {0, 30}, -- Move Left and Right
+                    {0, 21}, -- Sprint
+                    {0, 22}, -- Jump
+                    {0, 23}, -- Enter
+                    {0, 75}, -- Exit Vehicle
+                    {0, 71}, -- Accelerate Vehicle
+                    {0, 72}, -- Vehicle Brake
+                    {0, 59}, -- Move Vehicle Left and Right
+                    {0, 89}, -- Fly Yaw Left
+                    {0, 9}, -- Fly Left and Right
+                    {0, 8}, -- Fly Up and Down
+                    {0, 90}, -- Fly Yaw Right
+                    {0, 76}, -- Vehicle Handbrake
                 },
             }
         }
@@ -2895,7 +2876,7 @@ function UIMenu:ProcessControl()
                     self:GoUp()
                 end
                 self:UpdateScaleform()
-                Citizen.Wait(120)
+                Citizen.Wait(175)
                 while self.Controls.Up.Enabled and (IsDisabledControlPressed(0, 172) or IsDisabledControlPressed(1, 172) or IsDisabledControlPressed(2, 172) or IsDisabledControlPressed(0, 241) or IsDisabledControlPressed(1, 241) or IsDisabledControlPressed(2, 241) or IsDisabledControlPressed(2, 241)) do
                     if #self.Items > self.Pagination.Total + 1 then
                         self:GoUpOverflow()
@@ -2903,7 +2884,7 @@ function UIMenu:ProcessControl()
                         self:GoUp()
                     end
                     self:UpdateScaleform()
-                    Citizen.Wait(50)
+                    Citizen.Wait(125)
                 end
                 self.UpPressed = false
             end)
@@ -2920,7 +2901,7 @@ function UIMenu:ProcessControl()
                     self:GoDown()
                 end
                 self:UpdateScaleform()
-                Citizen.Wait(120)
+                Citizen.Wait(175)
                 while self.Controls.Down.Enabled and (IsDisabledControlPressed(0, 173) or IsDisabledControlPressed(1, 173) or IsDisabledControlPressed(2, 173) or IsDisabledControlPressed(0, 242) or IsDisabledControlPressed(1, 242) or IsDisabledControlPressed(2, 242)) do
                     if #self.Items > self.Pagination.Total + 1 then
                         self:GoDownOverflow()
@@ -2928,7 +2909,7 @@ function UIMenu:ProcessControl()
                         self:GoDown()
                     end
                     self:UpdateScaleform()
-                    Citizen.Wait(50)
+                    Citizen.Wait(125)
                 end
                 self.DownPressed = false
             end)
