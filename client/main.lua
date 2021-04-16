@@ -96,7 +96,7 @@ function startInspect(ped)
 	TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
 	TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
   
-	Citizen.Wait(5000)
+	Citizen.Wait(100)
   
 	--exits animation			
   
@@ -115,45 +115,13 @@ function startInspect(ped)
 
     local message = translateName(name)
     print(message)
-    subtext(message, 2500)
+    helpMessage(message)
     print(message)
 
-    Wait(1000)
+    Wait(5000)
 
     show_message = true
 
-end
-
-function startLocateBone(ped)
-    local bone_found, bone_ID = GetPedLastDamageBone(ped)
-    print(bone_found)
-    print(bone_ID)
-
-    if bone_found then
-        local bone_index = GetPedBoneIndex(ped, bone_ID)
-        local bone_location = GetPedBoneCoords(ped, bone_ID)
-        local x,y,z = table.unpack(bone_location)
-
-        print(bone_index)
-
-        show_bone = true
-        
-        CreateThread(function()
-            while show_bone do
-                Wait(0)
-        
-                local pedCoords = GetEntityCoords(PlayerPedId())
-                DrawMarker(22, x, y, z+0.5, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.2, 0.2, 0.2, 255, 128, 0, 50, false, true, 2, nil, nil, true)
-            end
-        end)
-
-        Wait(3000)
-        show_bone = false
-
-    else
-        subtext(translateName('no_bone_broke'), 2500)
-    end
-    show_message = true
 end
 
 --ClearHelp(true)
@@ -188,13 +156,6 @@ function notify(text)
     AddTextComponentString(text)
     DrawNotification(true, false)
 end
-
-function subtext(text, duration)
-    BeginTextCommandPrint("CELL_EMAIL_BCON") 
-	AddTextComponentSubstringPlayerName(text) 
-	EndTextCommandPrint(duration, true)
-end
-
 ----funcion up
 
 --TEST
@@ -204,9 +165,10 @@ RegisterCommand("helprafael", function(source, args , rawCommand)
 end, false)
 
 
-RegisterCommand("lonetest_inspect", function(source, args , rawCommand)
+RegisterCommand("lonetest", function(source, args , rawCommand)
     local ped = GetPlayerPed(-1)
     startInspect(ped)
+<<<<<<< HEAD
 end, false)
 
 RegisterCommand("lonetest_bone", function(source, args , rawCommand)
@@ -223,3 +185,6 @@ Citizen.CreateThread(function()
         end
     end
 end)
+=======
+end, false)
+>>>>>>> parent of 88fbc8c (subtitles + locate bone)
