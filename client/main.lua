@@ -237,10 +237,7 @@ RegisterCommand("lonetest_anim", function(source, args , rawCommand)
   
 	--starts animation
   
-	--loopAnimation(args[1])
-    --TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@enter" ,"enter" ,8.0, -8.0, -1, 1, 0, false, false, false )
-    TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@exit" ,"exit_flee" ,8.0, -8.0, -1, 1, 0, false, false, false )
-
+	loopAnimation(args[1])
 
   
 	--exits animation			
@@ -253,19 +250,24 @@ function loopAnimation(miliseconds)
         local playerPed = GetPlayerPed(-1)
 
         ClearPedTasksImmediately(playerPed)
+        --TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@enter" ,"enter" ,8.0, -8.0, -1, 1, 0, false, false, false )
+        --Citizen.Wait(7000)
 
         loop_animation = true
 
     
         CreateThread(function()
+            Wait(0)
             while loop_animation do
-                Wait(0)
                 TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
                 TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
-                Citizen.Wait(5000)
+                Citizen.Wait(7000)
             end
         end)
 
+        --EXIT KNEEL!!!
+        ----
+        ---
         Citizen.Wait(miliseconds)
         loop_animation = false
         ClearPedTasksImmediately(playerPed)
