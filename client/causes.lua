@@ -6,8 +6,8 @@ causes = {
     [-842959696] = 'fall',
     
     --vehicles
-    [-1553120962] = 'car',
-    [-1323279794] = 'aircraft_rotor',
+    [-1553120962] = 'vehicle',
+    [-1323279794] = 'aircraft',
     [-494786007] = 'lazer_explosive_canon',
     [1936677264] = 'car_drown',
     [1186503822] = 'helicopter_minigun',
@@ -16,8 +16,15 @@ causes = {
     [-486730914] = 'plane_turret',
     [2144528907] = 'technical_turret',
     [1155224728] = 'insurgent_turret',
+    [1192341548] = 'anti_aircraft_turret',
+    [-2138288820] = '20mm_flak_turret',
+    [1226518132] = '20mm_autocannon',
     --[1] = '#',
     --[1] = '#',
+    --[1] = '#',
+    --[1] = '#',
+    --[1] = '#',
+
 
     
 

@@ -71,7 +71,7 @@ function Locate(ped)
 
         if distance < 2.0 then
             if show_message then
-                helpMessage('Press ~INPUT_PICKUP~ to inspect body.')
+                helpMessage(translateName('keys_message'))
             end
             
             if IsControlPressed(0, Config.KeybindKeys['E']) then
@@ -79,7 +79,7 @@ function Locate(ped)
                 ClearHelp(true)
                 startInspect(ped)
             end
-            if IsControlPressed(0, Config.KeybindKeys['Q']) then
+            if IsControlPressed(0, Config.KeybindKeys['H']) then
                 message = false
                 ClearHelp(true)
                 startLocateBone(ped)
@@ -101,7 +101,7 @@ function startInspect(ped)
 	TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
 	TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
   
-	Citizen.Wait(5000)
+	Citizen.Wait(7000)
   
 	--exits animation			
   
@@ -143,6 +143,19 @@ function startLocateBone(ped)
 
         show_bone = true
         
+        local playerPed = GetPlayerPed(-1)
+  
+        --starts animation
+      
+        TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
+        TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
+      
+        Citizen.Wait(7000)
+      
+        --exits animation			
+      
+        ClearPedTasksImmediately(playerPed)
+
         CreateThread(function()
             while show_bone do
                 Wait(0)
@@ -176,7 +189,7 @@ end
 function translateName(name)
     local translation = Config.Languages[Config.MenuLanguage][name]
     if translation == nil then
-        return "[ERROR] No translation found for: ~g~" .. name
+        return "[ERROR] No ".. Config.MenuLanguage .. " translation found for: ~g~" .. name
     else
         return translation
     end
@@ -219,4 +232,41 @@ RegisterCommand("lonetest_bone", function(source, args , rawCommand)
     startLocateBone(ped)
 end, false)
 
------------------Native UI test
+RegisterCommand("lonetest_anim", function(source, args , rawCommand)
+    local playerPed = GetPlayerPed(-1)
+  
+	--starts animation
+  
+	--loopAnimation(args[1])
+    --TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@enter" ,"enter" ,8.0, -8.0, -1, 1, 0, false, false, false )
+    TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@exit" ,"exit_flee" ,8.0, -8.0, -1, 1, 0, false, false, false )
+
+
+  
+	--exits animation			
+  
+
+end, false)
+
+function loopAnimation(miliseconds)
+        loop_animation = true
+        local playerPed = GetPlayerPed(-1)
+
+        ClearPedTasksImmediately(playerPed)
+
+        loop_animation = true
+
+    
+        CreateThread(function()
+            while loop_animation do
+                Wait(0)
+                TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
+                TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
+                Citizen.Wait(5000)
+            end
+        end)
+
+        Citizen.Wait(miliseconds)
+        loop_animation = false
+        ClearPedTasksImmediately(playerPed)
+end
