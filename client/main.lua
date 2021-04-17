@@ -102,28 +102,28 @@ function Locate(ped)
 
             if distance < 1.0 then
                     local ped1 = GetPlayerPed(-1)
-                    looking_at_player = IsPedFacingPed(ped, ped1, 100)
+                    --looking_at_player = IsPedFacingPed(ped1, ped, 360)
                     if show_message then
                         helpMessage(translateName('keys_message'))
                     end
                     
                     if IsControlPressed(0, Config.KeybindKeys['E']) then
-                        if looking_at_player then
+                        --if looking_at_player then
                             message = false
                             ClearHelp(true)
                             startInspect(ped)
-                        else
-                            subtext(translateName(translateName('face_ped')), 1500)
-                        end
+                        --else
+                            --subtext(translateName(translateName('face_ped')), 1500)
+                        --end
                     end
                     if IsControlPressed(0, Config.KeybindKeys['H']) then
-                        if looking_at_player then
+                        --if looking_at_player then
                             message = false
                             ClearHelp(true)
                             startLocateBone(ped)
-                        else
+                        --else
                             subtext(translateName(translateName('face_ped')), 1500)
-                        end
+                        --end
 
                     end
             end
