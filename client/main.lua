@@ -109,6 +109,7 @@ function Locate(ped)
                     
                     if IsControlPressed(0, Config.KeybindKeys['E']) then
                         --if looking_at_player then
+                            SetEntityHeading(ped1, 40.0) --TEMP
                             message = false
                             ClearHelp(true)
                             startInspect(ped)
@@ -118,6 +119,7 @@ function Locate(ped)
                     end
                     if IsControlPressed(0, Config.KeybindKeys['H']) then
                         --if looking_at_player then
+                            SetEntityHeading(ped1, 40.0) --TEMP
                             message = false
                             ClearHelp(true)
                             startLocateBone(ped)
@@ -352,3 +354,4 @@ RegisterCommand("lonetest_sub", function(source, args , rawCommand)
 end, false)
 
 --------------
+--https://gis.stackexchange.com/questions/58923/calculating-view-angle
