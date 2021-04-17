@@ -97,16 +97,11 @@ function startInspect(ped)
 	local playerPed = GetPlayerPed(-1)
   
 	--starts animation
-  
-	TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
-	TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
-  
-	Citizen.Wait(7000)
+    local duration = math.random(Config.inspectDurationMin, Config.inspectDurationMax)
+	loopAnimation(duration)
   
 	--exits animation			
   
-	ClearPedTasksImmediately(playerPed)
-
     --get cause 
     local hash = GetPedCauseOfDeath(ped)		
 	local name = getNameFromHash(hash)
@@ -130,6 +125,9 @@ function startInspect(ped)
 end
 
 function startLocateBone(ped)
+    local duration = math.random(Config.searchDurationMin, Config.searchDurationMax)
+    loopAnimation(duration)
+
     local bone_found, bone_ID = GetPedLastDamageBone(ped)
     print(bone_found)
     print(bone_ID)
@@ -141,20 +139,18 @@ function startLocateBone(ped)
 
         print(bone_index)
 
+
+
         show_bone = true
+
+
         
         local playerPed = GetPlayerPed(-1)
   
         --starts animation
       
-        TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
-        TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
-      
-        Citizen.Wait(7000)
-      
-        --exits animation			
-      
-        ClearPedTasksImmediately(playerPed)
+
+
 
         CreateThread(function()
             while show_bone do
@@ -173,6 +169,53 @@ function startLocateBone(ped)
     end
     show_message = true
 end
+
+function loopAnimation(miliseconds)
+    loop_animation = true
+    local playerPed = GetPlayerPed(-1)
+
+    ClearPedTasksImmediately(playerPed)
+
+    xDisable = true
+    loop_animation = true
+
+
+    CreateThread(function()
+        Wait(0)
+        while loop_animation do
+            TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
+            TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
+            Citizen.Wait(5000)
+        end
+    end)
+    --EXIT KNEEL!!!
+    ----
+    ---
+    Citizen.Wait(miliseconds)
+    loop_animation = false
+    xDisable = false
+    ClearPedTasksImmediately(playerPed)
+end
+
+CreateThread(function()
+while true do
+    Wait(0)
+
+    while xDisable do
+        Wait(0)
+        DisableControlAction(0, 73, true) 
+        DisableControlAction(0, 120, true) 
+        DisableControlAction(0, 154, true) 
+        DisableControlAction(0, 186, true)
+        DisableControlAction(0, 252, true) 
+        DisableControlAction(0, 323, true) 
+        DisableControlAction(0, 337, true) 
+        DisableControlAction(0, 345, true) 
+        DisableControlAction(0, 354, true) 
+        DisableControlAction(0, 357, true) 
+    end
+end
+end)
 
 --ClearHelp(true)
 
@@ -216,6 +259,7 @@ end
 ----funcion up
 
 --TEST
+---------
 RegisterCommand("helprafael", function(source, args , rawCommand)
     TriggerServerEvent('flyyrin:log', typed_name ..' : ^^^^^ Means: ' .. args[1])
     print('^^^^^ Means: ' .. args[1])
@@ -232,12 +276,12 @@ RegisterCommand("lonetest_bone", function(source, args , rawCommand)
     startLocateBone(ped)
 end, false)
 
-RegisterCommand("lonetest_anim", function(source, args , rawCommand)
+RegisterCommand("lonetest_sub", function(source, args , rawCommand)
     local playerPed = GetPlayerPed(-1)
   
 	--starts animation
   
-	loopAnimation(args[1])
+	subtext(translateName('drown'), 5000)
 
   
 	--exits animation			
@@ -245,30 +289,4 @@ RegisterCommand("lonetest_anim", function(source, args , rawCommand)
 
 end, false)
 
-function loopAnimation(miliseconds)
-        loop_animation = true
-        local playerPed = GetPlayerPed(-1)
-
-        ClearPedTasksImmediately(playerPed)
-        --TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@enter" ,"enter" ,8.0, -8.0, -1, 1, 0, false, false, false )
-        --Citizen.Wait(7000)
-
-        loop_animation = true
-
-    
-        CreateThread(function()
-            Wait(0)
-            while loop_animation do
-                TaskPlayAnim(GetPlayerPed(-1), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, -1, 1, 0, false, false, false )
-                TaskPlayAnim(GetPlayerPed(-1), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, -1, 48, 0, false, false, false )
-                Citizen.Wait(7000)
-            end
-        end)
-
-        --EXIT KNEEL!!!
-        ----
-        ---
-        Citizen.Wait(miliseconds)
-        loop_animation = false
-        ClearPedTasksImmediately(playerPed)
-end
+--------------
