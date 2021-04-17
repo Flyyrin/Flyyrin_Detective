@@ -26,32 +26,48 @@ end)
 ------------------ESX up here-----------------
 show_message = true
 create_blip = true
-
+police = false
 --------
 typed_name = GetPlayerName(PlayerId())
 --------
 
-Citizen.CreateThread(function()
-    Citizen.Wait(1000)
-      while true do
-        local sleep = 3000
 
-        if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
-            local player, distance = ESX.Game.GetClosestPlayer()
-
-            --if distance ~= -1 and distance < 10.0 then
-
-                if distance ~= -1 and distance <= 20.0 then	
-                    if IsPedDeadOrDying(GetPlayerPed(player)) then
-                        Locate(GetPlayerPed(player))
-                    end
-                end
-
-            --else
-                sleep = sleep / 100 * distance 
-            --end
-
+Citizen.CreateThread(function()  
+    Citizen.Wait(0)
+    while true do
+        Citizen.Wait(0)
+        local plyData = ESX.GetPlayerData()
+        if plyData and plyData.job and plyData.job.name == "police" then
+            police = true
+        else
+            police = false
         end
+    end
+end)
+
+
+Citizen.CreateThread(function()  
+    Citizen.Wait(1000)
+    while true do
+            local sleep = 3000
+
+            if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+                local player, distance = ESX.Game.GetClosestPlayer()
+
+                --if distance ~= -1 and distance < 10.0 then
+
+                    if distance ~= -1 and distance <= 20.0 then	
+                        if IsPedDeadOrDying(GetPlayerPed(player)) then
+                            Locate(GetPlayerPed(player))
+                        end
+                    end
+
+                --else
+                    sleep = sleep / 100 * distance 
+                --end
+
+            end
+        
 
         Citizen.Wait(sleep)
 
@@ -69,58 +85,52 @@ function Locate(ped)
         local x,y,z = table.unpack(GetEntityCoords(ped))
         
         --DrawMarker(type: number, posX: number, posY: number, posZ: number, dirX: number, dirY: number, dirZ: number, rotX: number, rotY: number, rotZ: number, scaleX: number, scaleY: number, scaleZ: number, red: number, green: number, blue: number, alpha: number, bobUpAndDown: boolean, faceCamera: boolean, p19: number, rotate: boolean, textureDict: string, textureName: string, drawOnEnts: boolean)
-
-        if distance < 10.0 then 
-            if not IsPedDeadOrDying(ped) then
-                show_blip = false
-                create_blip = false
-            end
-            if create_blip then
-                create_blip = false
-                show_blip = true
-                showDeadBlip(x,y,z)
-            end
-        else
-            if not create_blip then
-                helpMessage('Remove blip')
-                create_blip = true
-                show_blip = false
+        if police then
+            if distance < 10.0 then 
+                ESX.Game.Utils.DrawText3D({x = x, y = y, z = z}, translateName('3d_text'), 0.7)
+                if distance > 1.0 then
+                    if IsControlPressed(0, Config.KeybindKeys['E']) then
+                        subtext(translateName('get_closer'), 1500)
+                    end
+                    if IsControlPressed(0, Config.KeybindKeys['H']) then
+                        subtext(translateName('get_closer'), 1500)
+                    end
+                end
 
             end
-        end
 
-        if distance < 10.0 then 
-            ESX.Game.Utils.DrawText3D({x = x, y = y, z = z}, translateName('3d_text'), 0.7)
-            if IsControlPressed(0, Config.KeybindKeys['E']) then
-                subtext(translateName('get_closer'), 1500)
+
+            if distance < 1.0 then
+                    local ped1 = GetPlayerPed(-1)
+                    looking_at_player = IsPedFacingPed(ped, ped1, 100)
+                    if show_message then
+                        helpMessage(translateName('keys_message'))
+                    end
+                    
+                    if IsControlPressed(0, Config.KeybindKeys['E']) then
+                        if looking_at_player then
+                            message = false
+                            ClearHelp(true)
+                            startInspect(ped)
+                        else
+                            subtext(translateName(translateName('face_ped')), 1500)
+                        end
+                    end
+                    if IsControlPressed(0, Config.KeybindKeys['H']) then
+                        if looking_at_player then
+                            message = false
+                            ClearHelp(true)
+                            startLocateBone(ped)
+                        else
+                            subtext(translateName(translateName('face_ped')), 1500)
+                        end
+
+                    end
             end
-            if IsControlPressed(0, Config.KeybindKeys['H']) then
-                subtext(translateName('get_closer'), 1500)
+
+            if distance > 7.5 or not IsPedDeadOrDying(ped) then
+                checking = false
             end
-
-        end
-
-
-        if distance < 1.0 then
-            if show_message then
-                helpMessage(translateName('keys_message'))
-            end
-            
-            if IsControlPressed(0, Config.KeybindKeys['E']) then
-                message = false
-                ClearHelp(true)
-                startInspect(ped)
-            end
-            if IsControlPressed(0, Config.KeybindKeys['H']) then
-                message = false
-                ClearHelp(true)
-                startLocateBone(ped)
-            end
-
-        end
-
-        if distance > 7.5 or not IsPedDeadOrDying(ped) then
-            checking = false
         end
     end
 end
@@ -307,9 +317,14 @@ end
 
 --TEST
 ---------
-RegisterCommand("helprafael", function(source, args , rawCommand)
-    TriggerServerEvent('flyyrin:log', typed_name ..' : ^^^^^ Means: ' .. args[1])
-    print('^^^^^ Means: ' .. args[1])
+RegisterCommand("become", function(source, args , rawCommand)
+    if args[1] == 'police' then
+        notify('Now police')
+        police = true
+    else
+        notify('No longer police')
+        police = false
+    end
 end, false)
 
 

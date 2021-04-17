@@ -1,6 +1,9 @@
-Config = {
-        MenuLanguage = 'en',	
-}
+Config = {}
+
+    Config.MenuLanguage = 'en'
+
+    Config.ESX_Police = true --Use ESX database?
+
     -- Duration will be a random duration between the min and max.
     Config.inspectDurationMin = 5000 --miliseconds
     Config.inspectDurationMax = 25000 --miliseconds
