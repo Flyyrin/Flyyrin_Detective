@@ -25,6 +25,7 @@ AddEventHandler("esx:setJob", function(job)
 end)
 ------------------ESX up here-----------------
 show_message = true
+create_blip = true
 
 --------
 typed_name = GetPlayerName(PlayerId())
@@ -40,7 +41,7 @@ Citizen.CreateThread(function()
 
             --if distance ~= -1 and distance < 10.0 then
 
-                if distance ~= -1 and distance <= 5.0 then	
+                if distance ~= -1 and distance <= 20.0 then	
                     if IsPedDeadOrDying(GetPlayerPed(player)) then
                         Locate(GetPlayerPed(player))
                     end
@@ -69,7 +70,38 @@ function Locate(ped)
         
         --DrawMarker(type: number, posX: number, posY: number, posZ: number, dirX: number, dirY: number, dirZ: number, rotX: number, rotY: number, rotZ: number, scaleX: number, scaleY: number, scaleZ: number, red: number, green: number, blue: number, alpha: number, bobUpAndDown: boolean, faceCamera: boolean, p19: number, rotate: boolean, textureDict: string, textureName: string, drawOnEnts: boolean)
 
-        if distance < 2.0 then
+        if distance < 10.0 then 
+            if not IsPedDeadOrDying(ped) then
+                show_blip = false
+                create_blip = false
+            end
+            if create_blip then
+                create_blip = false
+                show_blip = true
+                showDeadBlip(x,y,z)
+            end
+        else
+            if not create_blip then
+                helpMessage('Remove blip')
+                create_blip = true
+                show_blip = false
+
+            end
+        end
+
+        if distance < 10.0 then 
+            ESX.Game.Utils.DrawText3D({x = x, y = y, z = z}, translateName('3d_text'), 0.7)
+            if IsControlPressed(0, Config.KeybindKeys['E']) then
+                subtext(translateName('get_closer'), 1500)
+            end
+            if IsControlPressed(0, Config.KeybindKeys['H']) then
+                subtext(translateName('get_closer'), 1500)
+            end
+
+        end
+
+
+        if distance < 1.0 then
             if show_message then
                 helpMessage(translateName('keys_message'))
             end
@@ -107,16 +139,13 @@ function startInspect(ped)
 	local name = getNameFromHash(hash)
 
     TriggerServerEvent('flyyrin:log', typed_name.. ' : ' ..hash)
-    print(hash)
+    print('Inspected body hash: ' .. hash)
 
 
     --translate model
-    print(name)
 
     local message = translateName(name)
-    print(message)
     subtext(message, 2500)
-    print(message)
 
     Wait(1000)
 
@@ -129,15 +158,12 @@ function startLocateBone(ped)
     loopAnimation(duration)
 
     local bone_found, bone_ID = GetPedLastDamageBone(ped)
-    print(bone_found)
-    print(bone_ID)
 
     if bone_found then
         local bone_index = GetPedBoneIndex(ped, bone_ID)
         local bone_location = GetPedBoneCoords(ped, bone_ID)
         local x,y,z = table.unpack(bone_location)
 
-        print(bone_index)
 
 
 
@@ -161,7 +187,7 @@ function startLocateBone(ped)
             end
         end)
 
-        Wait(3000)
+        Wait(Config.showBoneDuration)
         show_bone = false
 
     else
@@ -254,6 +280,27 @@ function subtext(text, duration)
     BeginTextCommandPrint("CELL_EMAIL_BCON") 
 	AddTextComponentSubstringPlayerName(text) 
 	EndTextCommandPrint(duration, true)
+end
+
+function showDeadBlip(x,y,z)
+    CreateThread(function()
+        while show_blip do
+            Wait(0)
+            local blip = AddBlipForCoord(x, y, z)
+
+            SetBlipSprite (blip, 84)--sprite
+            SetBlipDisplay(blip, 6)--v.Blip.Display
+            SetBlipScale  (blip, 0.7)--scale
+            SetBlipColour (blip, 1)--color
+            SetBlipAsShortRange(blip, true)
+                
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentString("Dead Body")
+            EndTextCommandSetBlipName(blip)
+            Wait(5000)
+            RemoveBlip(blip)
+        end
+    end)
 end
 
 ----funcion up

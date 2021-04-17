@@ -8,6 +8,8 @@ Config = {
     Config.searchDurationMin = 5000 --miliseconds
     Config.searchDurationMax = 15000 --miliseconds
 
+    Config.showBoneDuration = 5000 --miliseconds
+
     Config.KeybindKeys = {
         ['Q'] = 44,
         ['G'] = 47,
@@ -19,10 +21,12 @@ Config = {
     
 Config.Languages = {
     ['en'] = {
-        ['keys_message'] = 'Press ~INPUT_PICKUP~ to inspect body or ~INPUT_VEH_SHUFFLE~ to search where the damage occurred.',
-        ['not_dead'] = 'This player is not dead.',
-        ['no_bone_broke'] = 'You cant find where te damage occurred.',
-        ['unknown'] = 'The dead cause is unknown to you.',
+        ['keys_message'] = 'Press ~INPUT_PICKUP~ to inspect body or ~INPUT_VEH_SHUFFLE~ to search where the damage occurred',
+        ['not_dead'] = 'This player is not dead',
+        ['no_bone_broke'] = 'You cant find where te damage occurred',
+        ['unknown'] = 'The dead cause is unknown to you',
+        ['3d_text'] = 'Press [~g~E~w~] to inspect or [~g~H~w~] to search damage',
+        ['get_closer'] = 'Get closer',
 
         ['drown'] = '~g~Drowned',
         ['fall'] = '~g~Fell ~w~ to hard',
@@ -131,10 +135,12 @@ Config.Languages = {
     },
 
     ['fr'] = {
-        ['keys_message'] = "Appuyez sur ~INPUT_PICKUP~ pour inspecter le corps ou sur ~INPUT_VEH_SHUFFLE~ pour rechercher où le dommage s'est produit.",
-        ['not_dead'] = "Ce joueur n'est pas mort.",
-        ['no_bone_broke'] = 'Vous ne pouvez pas trouver où le dommage est survenu.',
-        ['unknown'] = 'La cause morte vous est inconnue.',
+        ['keys_message'] = "Appuyez sur ~INPUT_PICKUP~ pour inspecter le corps ou sur ~INPUT_VEH_SHUFFLE~ pour rechercher où le dommage s'est produit",
+        ['not_dead'] = "Ce joueur n'est pas mort",
+        ['no_bone_broke'] = 'Vous ne pouvez pas trouver où le dommage est survenu',
+        ['unknown'] = 'La cause morte vous est inconnue',
+        ['3d_text'] = 'Appuyez sur [~g~E~w~] pour inspecter ou [~g~H~w~] pour rechercher des dommages',
+        ['get_closer'] = 'Se rapprocher',
 
         ['drown'] = '~g~Noyé',
         ['fall'] = '~g~Tombé ~w~trop dur',
