@@ -32,8 +32,9 @@ start = true
 typed_name = GetPlayerName(PlayerId())
 --------
 
--- on join,command TriggerServerEvent('flyyrin:requestAcces')
-
+AddEventHandler('playerSpawned', function()
+    start = true
+end)
 
 Citizen.CreateThread(function()  
     Citizen.Wait(0)
@@ -258,6 +259,7 @@ function loopAnimation(miliseconds)
 end
 
 CreateThread(function()
+TriggerEvent('chat:addSuggestion', '/detective','Checks if you are a detective.')
 while true do
     Wait(0)
 
@@ -348,35 +350,16 @@ function playerHeading(ped)
     SetEntityHeading(GetPlayerPed(-1), heading)
 end
 
+function msg(name,text)
+    TriggerEvent("chatMessage", name , {255,0,0}, text)
+end
+
 ----funcion up
 
---TEST
----------
-RegisterCommand("become", function(source, args , rawCommand)
-    if args[1] == 'police' then
-        notify('Now police')
-        police = true
+RegisterCommand('detective', function(source, args)
+    if police then
+        msg('[Flyyrin_Detective]', translateName('detective'))
     else
-        notify('No longer police')
-        police = false
+        msg('[Flyyrin_Detective]', translateName('not_detective'))
     end
 end, false)
-
-
-RegisterCommand("lonetest_inspect", function(source, args , rawCommand)
-    local ped = GetPlayerPed(-1)
-    startInspect(ped)
-end, false)
-
-RegisterCommand("lonetest_bone", function(source, args , rawCommand)
-    local ped = GetPlayerPed(-1)
-    startLocateBone(ped)
-end, false)
-
-RegisterCommand("lonetest_police", function(source, args , rawCommand)
-    print(police)
-end, false)
-
---------------
-
-
