@@ -27,9 +27,13 @@ end)
 show_message = true
 create_blip = true
 police = false
+start = true
 --------
 typed_name = GetPlayerName(PlayerId())
 --------
+
+-- on join,command TriggerServerEvent('flyyrin:requestAcces')
+
 
 Citizen.CreateThread(function()  
     Citizen.Wait(0)
@@ -44,8 +48,11 @@ Citizen.CreateThread(function()
                 police = false
             end  
         elseif Config.Identifier_Restricted then
-            TriggerServerEvent('flyyrin:requestAcces')
-            notify('Steamid')--DEBUG
+            if start then
+                start = false
+                TriggerServerEvent('flyyrin:requestAcces')
+                notify('Steamid')--DEBUG
+            end
         else
             notify('NO restriction')--DEBUG
             police = true
