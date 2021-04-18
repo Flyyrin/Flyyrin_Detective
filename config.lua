@@ -2,7 +2,10 @@ Config = {}
 
     Config.MenuLanguage = 'en'
 
-    Config.ESX_Police = true --Use ESX database?
+    Config.ESX_Police_Restricted = true --Only Useable by ESX police. Overwrites Identifier_Restricted!
+
+    Config.Identifier_Restricted = true --Only useable by whitelisted people.
+
 
     -- Duration will be a random duration between the min and max.
     Config.inspectDurationMin = 5000 --miliseconds
@@ -13,13 +16,9 @@ Config = {}
 
     Config.showBoneDuration = 5000 --miliseconds
 
-    Config.KeybindKeys = {
-        ['Q'] = 44,
-        ['G'] = 47,
-        ['X'] = 73,
+    Config.KeybindKeys = { --Dont change.
         ['E'] = 38,
         ['H'] = 104,
-        ['num9'] = 118
     }
     
 Config.Languages = {

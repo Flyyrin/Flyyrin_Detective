@@ -36,11 +36,20 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     while true do
         Citizen.Wait(0)
-        local plyData = ESX.GetPlayerData()
-        if plyData and plyData.job and plyData.job.name == "police" then
-            police = true
+        if Config.ESX_Police_Restricted then
+            notify('ESX')
+            local plyData = ESX.GetPlayerData()
+            if plyData and plyData.job and plyData.job.name == "police" then
+                police = true
+            else
+                police = false
+            end  
+        elseif Config.Identifier_Restricted then
+            --Steam id
+            notify('Steamid')
         else
-            police = false
+            notify('NO restriction')
+            police = true
         end
     end
 end)
@@ -109,7 +118,7 @@ function Locate(ped)
                     
                     if IsControlPressed(0, Config.KeybindKeys['E']) then
                         --if looking_at_player then
-                            SetEntityHeading(ped1, 40.0) --TEMP
+                            playerHeading(ped)
                             message = false
                             ClearHelp(true)
                             startInspect(ped)
@@ -119,12 +128,12 @@ function Locate(ped)
                     end
                     if IsControlPressed(0, Config.KeybindKeys['H']) then
                         --if looking_at_player then
-                            SetEntityHeading(ped1, 40.0) --TEMP
+                            playerHeading(ped)
                             message = false
                             ClearHelp(true)
                             startLocateBone(ped)
                         --else
-                            subtext(translateName(translateName('face_ped')), 1500)
+                            --subtext(translateName(translateName('face_ped')), 1500)
                         --end
 
                     end
@@ -157,7 +166,7 @@ function startInspect(ped)
     --translate model
 
     local message = translateName(name)
-    subtext(message, 2500)
+    subtext(message, 3500)
 
     Wait(1000)
 
@@ -203,7 +212,7 @@ function startLocateBone(ped)
         show_bone = false
 
     else
-        subtext(translateName('no_bone_broke'), 2500)
+        subtext(translateName('no_bone_broke'), 3500)
     end
     show_message = true
 end
@@ -315,9 +324,9 @@ function showDeadBlip(x,y,z)
     end)
 end
 
-function playerHeading(pedloc)
+function playerHeading(ped)
     local player = GetEntityCoords(GetPlayerPed(-1))
-    --local pedloc = GetEntityCoords(ped, true)
+    local pedloc = GetEntityCoords(ped, true)
 
     local dx = pedloc.x - player.x
     local dy = pedloc.y - player.y
