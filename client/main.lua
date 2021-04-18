@@ -41,7 +41,6 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         if Config.ESX_Police_Restricted then
-            notify('ESX')--DEBUG
             local plyData = ESX.GetPlayerData()
             if plyData and plyData.job and plyData.job.name == "police" then
                 police = true
@@ -52,10 +51,8 @@ Citizen.CreateThread(function()
             if start then
                 start = false
                 TriggerServerEvent('flyyrin:requestAcces')
-                notify('Steamid')--DEBUG
             end
         else
-            notify('NO restriction')--DEBUG
             police = true
         end
     end
