@@ -315,6 +315,17 @@ function showDeadBlip(x,y,z)
     end)
 end
 
+function playerHeading(pedloc)
+    local player = GetEntityCoords(GetPlayerPed(-1))
+    --local pedloc = GetEntityCoords(ped, true)
+
+    local dx = pedloc.x - player.x
+    local dy = pedloc.y - player.y
+
+    local heading = GetHeadingFromVector_2d(dx, dy)
+    SetEntityHeading(GetPlayerPed(-1), heading)
+end
+
 ----funcion up
 
 --TEST
@@ -340,18 +351,9 @@ RegisterCommand("lonetest_bone", function(source, args , rawCommand)
     startLocateBone(ped)
 end, false)
 
-RegisterCommand("lonetest_sub", function(source, args , rawCommand)
-    local playerPed = GetPlayerPed(-1)
-  
-	--starts animation
-  
-	subtext(translateName('drown'), 5000)
-
-  
-	--exits animation			
-  
-
+RegisterCommand("lonetest_angle", function(source, args , rawCommand)
+    playerHeading(vector3(tonumber(args[1]), tonumber(args[2]), 0.0))
 end, false)
 
 --------------
---https://gis.stackexchange.com/questions/58923/calculating-view-angle
+
