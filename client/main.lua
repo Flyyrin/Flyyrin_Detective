@@ -31,13 +31,12 @@ police = false
 typed_name = GetPlayerName(PlayerId())
 --------
 
-
 Citizen.CreateThread(function()  
     Citizen.Wait(0)
     while true do
         Citizen.Wait(0)
         if Config.ESX_Police_Restricted then
-            notify('ESX')
+            notify('ESX')--DEBUG
             local plyData = ESX.GetPlayerData()
             if plyData and plyData.job and plyData.job.name == "police" then
                 police = true
@@ -45,13 +44,20 @@ Citizen.CreateThread(function()
                 police = false
             end  
         elseif Config.Identifier_Restricted then
-            --Steam id
-            notify('Steamid')
+            TriggerServerEvent('flyyrin:requestAcces')
+            notify('Steamid')--DEBUG
         else
-            notify('NO restriction')
+            notify('NO restriction')--DEBUG
             police = true
         end
     end
+end)
+
+
+
+RegisterNetEvent('flyyrin:police_true')
+AddEventHandler('flyyrin:police_true', function()
+    police = true
 end)
 
 
@@ -360,9 +366,10 @@ RegisterCommand("lonetest_bone", function(source, args , rawCommand)
     startLocateBone(ped)
 end, false)
 
-RegisterCommand("lonetest_angle", function(source, args , rawCommand)
-    playerHeading(vector3(tonumber(args[1]), tonumber(args[2]), 0.0))
+RegisterCommand("lonetest_police", function(source, args , rawCommand)
+    print(police)
 end, false)
 
 --------------
+
 

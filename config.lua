@@ -2,7 +2,7 @@ Config = {}
 
     Config.MenuLanguage = 'en'
 
-    Config.ESX_Police_Restricted = true --Only Useable by ESX police. Overwrites Identifier_Restricted!
+    Config.ESX_Police_Restricted = false --Only Useable by ESX police. Overwrites Identifier_Restricted!
 
     Config.Identifier_Restricted = true --Only useable by whitelisted people.
 
