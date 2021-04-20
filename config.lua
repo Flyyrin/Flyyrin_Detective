@@ -1,10 +1,10 @@
 Config = {}
 
-    Config.MenuLanguage = 'sv'
+    Config.MenuLanguage = 'en'
 
-    Config.ESX_Police_Restricted = false --Only Useable by ESX police. !!!Overwrites Identifier_Restricted!!!
+    Config.ESX_Police_Restricted = true --Only Useable by ESX police. !!!Overwrites Identifier_Restricted!!!
 
-    Config.Identifier_Restricted = true --Only useable by whitelisted people.
+    Config.Identifier_Restricted = false --Only useable by whitelisted people.
     Config.Identifiers = {
         ["license2:05e3c4498e7ddc94159624cafa7e14c2cca86787"] = "allow",
         ["steam:110000109761e2c"] = "allow", 
